@@ -1,0 +1,25 @@
+/* #1  Retrieve all customers from either Germany or USA
+.IN example */
+
+SELECT *
+FROM customers
+WHERE country = 'Germany' OR country = 'USA'
+
+-- IN Method--
+SELECT *
+FROM customers
+WHERE country IN ('Germany' , 'USA')
+
+--Lot of countries we use this format
+
+SELECT *
+FROM customers 
+WHERE country = 'Germany'
+ OR country = 'USA'
+ OR country = 'France'
+
+ --Another Method
+SELECT *
+FROM customers
+WHERE country IN ('Germany', 'USA' , 'France')
+ 
