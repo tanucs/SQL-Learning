@@ -1,0 +1,30 @@
+---------INNER JOINS---------
+/* Get all customers along with their order,
+but only for customers who have placed an order
+*/
+
+SELECT *
+FROM customers
+INNER JOIN orders
+ON id = customer_id
+
+--When we give specific columns--
+
+SELECT 
+  customers.id,
+  customers.first_name,--best practice to mention like that
+  orders.order_id,
+  orders.sales
+FROM customers
+INNER JOIN orders
+ON customers.id = orders.customer_id
+
+--Another method to mention--
+SELECT
+ c.id,
+ c.first_name,
+ o.order_id,
+ o.sales
+FROM customers AS c
+INNER JOIN orders AS o
+ON c.id = o.customer_id
