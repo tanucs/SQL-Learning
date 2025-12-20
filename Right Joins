@@ -11,3 +11,19 @@ SELECT
 FROM customers AS c
 RIGHT JOIN orders AS o
 ON c.id = o.customer_id
+
+
+--Alternative method using Left joins---
+
+/* Get all customers along their orders,
+including orders without matching customers
+*/
+
+SELECT 
+  c.id,
+  c.first_name,
+  o.order_id,
+  o.sales
+FROM orders AS c
+LEFT JOIN customers AS c
+ON c.id = o.customer_id
