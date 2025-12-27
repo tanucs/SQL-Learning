@@ -1,0 +1,45 @@
+-----------CALCULATIONS-------
+
+/*
+DATEADD()
+*/
+SELECT
+OrderID,
+OrderDate,
+DATEADD(day, -10,OrderDate) AS TenDaysBefore,
+DATEADD(month, 3,OrderDate) AS ThreeMonthsLater,
+DATEADD(year , 2,OrderDate) AS TwoYearsLater
+FROM Sales.Orders
+
+/*
+Datediff()
+*/
+
+/* Calculate the age of employees */
+
+SELECT
+EmployeeID,
+BirthDate,
+DATEDIFF(year, BirthDate, GETDATE()) Age
+FROM Sales.Employees
+
+/*Find the average shipping duration in days for each month
+*/
+SELECT
+MONTH(OrderDate) AS OrderDate,
+AVG(DATEDIFF(day, OrderDate,ShipDate)) AvgShip
+FROM Sales.Orders
+GROUP BY MONTH(OrderDate)
+
+---# TIME GAP ANALYSIS----
+
+/*Find the number of days between each order and previous order
+*/
+SELECT
+OrderID,
+OrderDate CurrentOrderDate,
+LAG(OrderDate) OVER (ORDER BY OrderDate) PreviousOrderDate,
+DATEDIFF(day, LAG(OrderDate) OVER (ORDER BY OrderDate), OrderDate)NrOfDays
+FROM Sales.Orders
+
+
