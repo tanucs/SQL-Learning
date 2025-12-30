@@ -1,0 +1,91 @@
+------------NULL FUNCTION------------
+
+/*
+Find the average scores of the customers
+*/
+SELECT
+CustomerID,
+Score,
+COALESCE(Score,0) Score2,
+AVG(Score) OVER() AvgScores,
+AVG(COALESCE(Score,0)) OVER() AvgScores2
+From Sales.Customers
+
+/*
+Display the full name of customers in a single field by
+merging their first and last names,and add 10 bonus pints to
+each customers's score.
+*/
+SELECT
+CustomerID,
+FirstName,
+LastName,
+FirstName + ' ' + COALESCE(LastName, '') AS FullName,
+Score,
+COALESCE(Score, 0) + 10 AS ScoreWithBouns
+FROM Sales.Customers
+
+/* 
+Sort the customers from lowest to highest scores,with 
+NULLs appering last
+*/
+SELECT
+CustomerID,
+Score
+FROM Sales.Customers
+ORDER BY CASE WHEN Score IS NULL THEN 1 ELSE 0 END, Score
+
+/*
+Find the sales price for each order by dividing the sales 
+by the quantity
+*/
+SELECT
+CustomerID,
+Sales,
+Quantity,
+Sales / NULLIF(Quantity, 0) AS Price
+FROM Sales.Orders
+
+/*
+Identify the customers who have no score
+*/
+SELECT
+*
+FROM Sales.Customers
+WHERE Score IS NULL
+
+/*
+List all customers who have scores
+*/
+SELECT
+*
+FROM Sales.Customers
+WHERE Score IS NOT NULL
+
+/*
+List all details for customers who have not placed any 
+orders
+*/
+SELECT
+c.*,
+o.OrderID
+FROM Sales.Customers c
+LEFT JOIN Sales.Orders o
+ON c.CustomerID = o.CustomerID
+WHERE o.CustomerID IS NULL
+
+---Null VS Empty Space VS Blank Space---
+
+;WITH Orders AS (
+SELECT 1 Id, 'A' Category UNION
+SELECT 2, NULL UNION
+SELECT 3, '' UNION
+SELECT 4, ' '
+)
+SELECT
+*,
+DATALENGTH(Category) CategoryLen,
+DATALENGTH (TRIM(Category)) Policy1,
+NULLIF(TRIM(Category), '')Policy2,
+COALESCE(Category, 'unknown') Policy3
+FROM Orders
