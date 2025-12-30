@@ -6,7 +6,7 @@ categories: High (sales over 50), Medium (sales 21-50),
 Low(sales 20 or less) Sort the categories from highest
 sales to lowest */
 
-   ---Agggregate Data----
+   
 SELECT
 Category,
 SUM(Sales) AS TotalSales ----- Aggregate Data---------
@@ -32,3 +32,92 @@ CASE
    WHEN Sales > 20 THEN 'Medium'
 END Category
 FROM Sales.Orders
+
+/*
+Retrieve emplpoyees details with gender displayed as full text
+*/
+
+SELECT
+EmployeeID,
+FirstName,
+LastName,
+Gender,
+CASE 
+   WHEN Gender = 'F' THEN 'Female'
+   WHEN Gender = 'M' THEN 'Male'
+   ELSE 'Not Available'
+END GenderFullText
+FROM Sales.Employees
+
+/*
+Retrieve customers details with abbrevation country code
+*/
+
+SELECT
+	CustomerID,
+	FirstName,
+	LastName,
+	Country,
+CASE
+	WHEN Country = 'Germany' THEN 'DE'
+	WHEN Country = 'USA' THEN 'US'
+	ELSE 'n/a'
+ END CountryAbbr
+FROM Sales.Customers;
+
+
+----QUICK FORM----
+SELECT
+	CustomerID,
+	FirstName,
+	LastName,
+	Country,
+CASE
+	WHEN Country = 'Germany' THEN 'DE'
+	WHEN Country = 'USA' THEN 'US'
+	ELSE 'n/a'
+ END CountryAbbr,
+
+ CASE
+	WHEN Country = 'Germany' THEN 'DE'
+	WHEN Country = 'USA' THEN 'US'
+	ELSE 'n/a'
+ END CountryAbbr2
+
+FROM Sales.Customers;
+
+/*
+Find the average score pf customers and treat Nulls as 0
+Additionally provide details such CustomerID and LastName
+*/
+
+SELECT
+CustomerID,
+LastName,
+Score,
+CASE 
+  WHEN Score IS NULL THEN 0 
+  ELSE Score
+END ScoreClean,
+
+AVG(CASE
+    WHEN Score IS NULL THEN 0
+    ELSE Score
+  END) OVER() AvgCustomerClean,
+
+AVG(Score) OVER() AvgCusotmer
+FROM Sales.Customers
+
+/* Count how many times each cusotmer has made an order
+with sales greater than 30
+*/
+SELECT
+ CustomerID,
+ SUM(CASE 
+   WHEN Sales > 30 THEN 1
+   ELSE 0
+ END) TotalOrdersHighSales,
+ COUNT(*) TotalOrders
+FROM Sales.Orders
+GROUP BY CustomerID
+
